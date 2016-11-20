@@ -1,5 +1,12 @@
 # Heroes
 
+To install:
+Check out from git 
+Install latest node.js (earlier than version 7, currently using 6.9.1)
+Update npm to latest: npm install --global npm (currently using 4.0.2)
+Install angular-cli: npm install -g angular-cli
+Run npm install in the project root directory
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.20-4.
 
 ## Development server
