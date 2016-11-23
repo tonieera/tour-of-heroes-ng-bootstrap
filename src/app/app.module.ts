@@ -5,6 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './heroes/data/in-memory-data.service';
 
@@ -29,6 +31,7 @@ import { HeroSearchComponent } from './heroes/hero-search/hero-search.component'
     BrowserModule,
     FormsModule,
     HttpModule,
+    NgbModule.forRoot(),
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule
   ],

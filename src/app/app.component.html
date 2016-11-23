@@ -1,6 +1,22 @@
-<h1>{{title}}</h1>
-<nav>
+<!-- Navigation bar -->
+<nav class="navbar navbar-fixed-top navbar-dark bg-primary">
+  <a class="navbar-brand brand-padding" routerLink="/dashboard">{{title}}</a>
+  <button type="button" class="navbar-toggler hidden-sm-up float-xs-right" (click)="isNavbarCollapsed = !isNavbarCollapsed"></button>
+  <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-toggleable-xs" id="navContent">  
+    <ul class="nav navbar-nav" (click)="isNavbarCollapsed = true">
+      <li class="nav-item"><a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/heroes" routerLinkActive="active">Heroes</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!--<h1>{{title}}</h1>-->
+<!--<nav>
     <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
     <a routerLink="/heroes" routerLinkActive="active">Heroes</a>
-</nav>
-<router-outlet></router-outlet>
+</nav>-->
+
+<!-- Content -->
+<div class="container" (click)="isNavbarCollapsed = true">
+  <router-outlet></router-outlet>
+</div>
