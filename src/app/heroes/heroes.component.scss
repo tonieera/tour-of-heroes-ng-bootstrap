@@ -1,0 +1,8 @@
+@import '../../assets/css/_variables.scss';
+h3 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.selected {
+    background-color: $table-select-background-color;
+  }

@@ -1,0 +1,28 @@
+@import '../../assets/css/_variables.scss';
+a {
+  text-decoration: none;
+}
+h3 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center; 
+}
+h4 {
+  position: relative;
+}
+.heroes {
+  margin-bottom: 20px;
+}
+.hero {
+  margin:5px; 
+  padding:10px; 
+  text-align: center;
+  color: $primary-text-color;
+  background-color: $primary-background-color;
+  border-radius: 2px;
+}
+.hero:hover {
+  background-color: $primary-text-color;
+  cursor: pointer;
+  color: $primary-background-color;
+}

@@ -1,0 +1,15 @@
+@import '_variables.scss';
+@import '~bootstrap/scss/bootstrap.scss';
+.navbar {
+  @include media-breakpoint-down(xs) {
+    .navbar-brand {
+      float: none;
+    }
+  }
+}
+.brand-padding {
+  padding-right: 30px;
+}
+body {
+  padding-top: 70px;
+}
