@@ -35,25 +35,11 @@ export class HeroesComponent implements OnInit {
     this.heroService.getHeroes().then(heroes => { this.heroes = heroes; this.spinnerService.stop(); });
   }
 
-  add(name: string): void {
+  add(name: string) {
     name = name.trim();
-    if (!name) {
-      return;
-    }
     this.spinnerService.start();
     this.heroService.create(name).then(hero => {
-      this.heroes.push(hero);
-      this.selectedHero = null;
-      this.spinnerService.stop();
-      this.renderer.invokeElementMethod(this.newHeroName.nativeElement, 'select');
-    });
-  }
-
-  onSubmit(name: string) {
-    name = name.trim();
-    // if (!name) { return false; }
-    this.spinnerService.start();
-    this.heroService.create(name).then(hero => {
+      console.log('New hero: ' + hero);
       this.heroes.push(hero);
       this.selectedHero = null;
       this.spinnerService.stop();

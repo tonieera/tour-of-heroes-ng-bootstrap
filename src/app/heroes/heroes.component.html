@@ -1,7 +1,7 @@
 <h3>My Heroes</h3>
 
 <div>
-  <form novalidate (ngSubmit)="onSubmit(newHeroName.value); newHeroName.value=''; newHeroForm.reset();" #newHeroForm="ngForm">
+  <form novalidate (ngSubmit)="add(newHeroName.value); newHeroName.value=''; newHeroForm.reset();" #newHeroForm="ngForm">
     <div class="form-group row">
       <div class="col-sm-2"><label for="newHeroName">Hero name:</label></div>
       <div class="col-sm-4">

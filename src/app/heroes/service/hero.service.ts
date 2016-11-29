@@ -4,18 +4,26 @@ import { Observable } from 'rxjs';
 
 import 'rxjs/add/operator/toPromise';
 
+import { environment } from '../../../environments/environment';
+
 import { Hero } from '../model/hero.model';
 
 @Injectable()
 export class HeroService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private heroesUrl = 'app/heroes';  // URL to web api
+
+  private heroesApiUrl = environment.heroesApiUrl;
+  private getHeroesUrl = this.heroesApiUrl + '/api/heroes';
+  private createHeroUrl = this.heroesApiUrl + '/api/create-hero';
+  private updateHeroUrl = this.heroesApiUrl + '/api/update-hero';
+  private deleteHeroUrl = this.heroesApiUrl + '/api/delete-hero';
+  private searchHeroUrl = this.heroesApiUrl + '/api/hero-search';
 
   constructor(private http: Http) { }
 
   getHeroes(): Promise<Hero[]> {
-    return this.http.get(this.heroesUrl)
+    return this.http.get(this.getHeroesUrl)
       .toPromise()
       .then(response => response.json().data as Hero[])
       .catch(this.handleError);
@@ -33,7 +41,7 @@ export class HeroService {
   }
 
   update(hero: Hero): Promise<Hero> {
-    const url = `${this.heroesUrl}/${hero.id}`;
+    const url = `${this.updateHeroUrl}/${hero.id}`;
       return this.http
         .put(url, JSON.stringify(hero), {headers: this.headers})
         .toPromise()
@@ -43,14 +51,14 @@ export class HeroService {
 
   create(name: string): Promise<Hero> {
     return this.http
-      .post(this.heroesUrl, JSON.stringify({name: name}), {headers: this.headers})
+      .post(this.createHeroUrl, JSON.stringify({name: name}), {headers: this.headers})
       .toPromise()
-      .then(res => res.json().data)
+      .then(res => res.json())
       .catch(this.handleError);
   }
 
   delete(id: number): Promise<void> {
-    const url = `${this.heroesUrl}/${id}`;
+    let url = `${this.deleteHeroUrl}/${id}`;
     return this.http.delete(url, {headers: this.headers})
       .toPromise()
       .then(() => null)
@@ -58,8 +66,9 @@ export class HeroService {
   }
 
   search(term: string): Observable<Hero[]> {
+    let url = `${this.searchHeroUrl}/?name=${term}`;
     return this.http
-      .get(`app/heroes/?name=${term}`)
+      .get(url)
       .map((r: Response) => r.json().data as Hero[]);
   }
 
