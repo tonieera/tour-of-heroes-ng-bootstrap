@@ -1,22 +1,29 @@
 <h3>My Heroes</h3>
 
 <div>
-  <div class="form-group row">
-    <div class="col-sm-2"><label>Hero name:</label></div>
-    <div class="col-sm-4">
-      <div class="input-group input-group-sm">
-        <input class="form-control" #heroName />
-        <span class="input-group-btn"><button class="btn btn-primary btn-sm" (click)="add(heroName.value); heroName.value=''">Add</button></span>
+  <form novalidate (ngSubmit)="onSubmit(newHeroName.value); newHeroName.value=''; newHeroForm.reset();" #newHeroForm="ngForm">
+    <div class="form-group row">
+      <div class="col-sm-2"><label for="newHeroName">Hero name:</label></div>
+      <div class="col-sm-4">
+        <div [ngClass]="{'has-danger':!(newHeroNameModel.valid || newHeroNameModel.pristine)}">
+          <div class="input-group input-group-sm">
+            <input class="form-control" id="newHeroName" ngModel name="newHeroName" #newHeroName #newHeroNameModel="ngModel" notblank focus placeholder="Hero name"/>
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary btn-sm" [disabled]="!newHeroForm.form.valid">Add</button>
+            </span>
+          </div>
+          <small [hidden]="newHeroNameModel.valid || newHeroNameModel.pristine" class="form-control-feedback">Hero name is required</small>
+        </div>
       </div>
     </div>
-  </div> 
+  </form> 
 </div>
 
 <table class="table table-sm table-hover">
-  <tr *ngFor="let hero of heroes" [class.selected]="hero === selectedHero" (click)="onSelect(hero)">
+  <tr *ngFor="let hero of heroes" [class.selected]="hero === selectedHero" (click)="newHeroForm.reset(); onSelect(hero)">
     <th scope="row">{{hero.id}}</th> 
     <td>{{hero.name}}</td>
-    <td><button class="btn btn-primary btn-sm" (click)="delete(hero); $event.stopPropagation()">x</button></td>
+    <td><button class="btn btn-primary btn-sm" (click)="newHeroForm.reset(); delete(hero); $event.stopPropagation()">x</button></td>
   </tr>
 </table>
 
@@ -24,5 +31,5 @@
   <h3>
     {{selectedHero.name | uppercase}} is my hero
   </h3>
-  <button class="btn btn-primary" (click)="gotoDetail()">View Details</button>
+  <button #viewDetails class="btn btn-primary" (click)="gotoDetail()" focus>View Details</button>
 </div>
