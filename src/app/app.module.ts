@@ -10,12 +10,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule }     from './app-routing.module';
 
 import { SpinnerService } from './spinner/service/spinner.service';
+import { ErrorService } from './error/service/error.service';
 
 import { FocusDirective } from './shared/view/focus.directive';
 import { NotBlankDirective } from './shared/validation/notblank.directive';
 
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { ErrorComponent } from './error/error.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeroService } from './heroes/service/hero.service';
 import { HeroesComponent } from './heroes/heroes.component';
@@ -26,6 +28,7 @@ import { HeroSearchComponent } from './heroes/hero-search/hero-search.component'
   declarations: [
     AppComponent,
     SpinnerComponent,
+    ErrorComponent,
     FocusDirective,
     NotBlankDirective,
     DashboardComponent,
@@ -40,7 +43,7 @@ import { HeroSearchComponent } from './heroes/hero-search/hero-search.component'
     NgbModule.forRoot(),
     AppRoutingModule
   ],
-  providers: [ SpinnerService, HeroService ],
+  providers: [ SpinnerService, ErrorService, HeroService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

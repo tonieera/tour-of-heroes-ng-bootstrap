@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { SpinnerService } from '../../spinner/service/spinner.service';
+import { ErrorService } from '../../error/service/error.service';
 
 import { Hero } from '../model/hero.model';
 import { HeroService } from '../service/hero.service';
@@ -19,18 +20,23 @@ export class HeroDetailComponent implements OnInit {
 
   constructor(
     private spinnerService: SpinnerService,
+    private errorService: ErrorService,
     private heroService: HeroService,
     private route: ActivatedRoute,
     private location: Location) {
     }
 
   ngOnInit(): void {
-    this.spinnerService.start();
     this.route.params
-      .switchMap((params: Params) => this.heroService.getHero(+params['id']))
-      .subscribe(hero => {
-        this.hero = hero; this.spinnerService.stop();
-      });
+      .switchMap((params: Params) => {
+        this.spinnerService.start();
+        return this.heroService.getHero(+params['id'])
+          .finally(() => this.spinnerService.stop());
+      })
+      .subscribe(
+        hero => this.hero = hero,
+        error => this.errorService.publishError(error)
+      );
   }
 
   goBack(): void {
@@ -40,6 +46,11 @@ export class HeroDetailComponent implements OnInit {
   save(): void {
     this.hero.name = this.hero.name.trim();
     this.spinnerService.start();
-    this.heroService.update(this.hero).then(() => { this.goBack(); this.spinnerService.stop(); });
+    this.heroService.update(this.hero)
+      .finally(() => this.spinnerService.stop())
+      .subscribe(
+        () => this.goBack(),
+        error => this.errorService.publishError(error)
+      );
   }
 }

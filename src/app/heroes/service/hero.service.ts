@@ -22,47 +22,45 @@ export class HeroService {
 
   constructor(private http: Http) { }
 
-  getHeroes(): Promise<Hero[]> {
-    return this.http.get(this.getHeroesUrl)
-      .toPromise()
-      .then(response => response.json().data as Hero[])
-      .catch(this.handleError);
+  getHeroes(): Observable<Hero[]> {
+    return this.http
+      .get(this.getHeroesUrl)
+      .map((res: Response) => res.json().data as Hero[])
+      .catch((error: any) => Observable.throw(error));
   }
 
-  getHeroesSlowly(): Promise<Hero[]> {
-    return new Promise<Hero[]>(resolve =>
-      setTimeout(resolve, 2000)) // delay 2 seconds
-      .then(() => this.getHeroes());
+  getHeroesSlowly(): Observable<Hero[]> {
+    return this.http
+      .get(this.getHeroesUrl)
+      .map((res: Response) => res.json().data as Hero[])
+      .delay(2000)
+      .catch((error: any) => Observable.throw(error));
   }
 
-  getHero(id: number): Promise<Hero> {
-    return this.getHeroes()
-      .then(heroes => heroes.find(hero => hero.id === id));
+  getHero(id: number): Observable<Hero> {
+    return this.getHeroes().map(heroes => heroes.filter(hero => hero.id === id)[0]);
   }
 
-  update(hero: Hero): Promise<Hero> {
+  update(hero: Hero): Observable<Hero> {
     const url = `${this.updateHeroUrl}/${hero.id}`;
-      return this.http
-        .put(url, JSON.stringify(hero), {headers: this.headers})
-        .toPromise()
-        .then(() => hero)
-        .catch(this.handleError);
+    return this.http
+      .put(url, JSON.stringify(hero), {headers: this.headers})
+      .map((res: Response) => res.json().data as Hero[])
+      .catch((error: any) => Observable.throw(error));
   }
 
-  create(name: string): Promise<Hero> {
+  create(name: string): Observable<Hero> {
     return this.http
       .post(this.createHeroUrl, JSON.stringify({name: name}), {headers: this.headers})
-      .toPromise()
-      .then(res => res.json())
-      .catch(this.handleError);
+      .map((res: Response) => res.json() as Hero[])
+      .catch((error: any) => Observable.throw(error));
   }
 
-  delete(id: number): Promise<void> {
+  delete(id: number): Observable<void> {
     let url = `${this.deleteHeroUrl}/${id}`;
     return this.http.delete(url, {headers: this.headers})
-      .toPromise()
-      .then(() => null)
-      .catch(this.handleError);
+      .map((res: Response) => null)
+      .catch((error: any) => Observable.throw(error));
   }
 
   search(term: string): Observable<Hero[]> {
@@ -70,10 +68,5 @@ export class HeroService {
     return this.http
       .get(url)
       .map((r: Response) => r.json().data as Hero[]);
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
   }
 }

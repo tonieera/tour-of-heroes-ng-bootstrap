@@ -1,0 +1,26 @@
+<template ngbModalContainer #errorModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Error</h4>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive">
+      <table class="table table-sm table-hover">
+        <tr>
+          <td class="col-sm-2" scope="row">Code:</td> 
+          <td class="col-sm-10">{{error.code}}</td>
+        </tr>
+        <tr>
+          <td class="col-sm-2" scope="row">Message:</td> 
+          <td class="col-sm-10">{{error.message}}</td>
+        </tr>
+        <tr>
+          <td class="col-sm-2" scope="row">Detail:</td> 
+          <td class="col-sm-10">{{error.detail}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</template>

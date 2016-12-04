@@ -1,35 +1,36 @@
 <h3>My Heroes</h3>
-
-<div>
-  <form novalidate (ngSubmit)="add(newHeroName.value); newHeroName.value=''; newHeroForm.reset();" #newHeroForm="ngForm">
-    <div class="form-group row">
-      <div class="col-sm-2"><label for="newHeroName">Hero name:</label></div>
-      <div class="col-sm-4">
-        <div [ngClass]="{'has-danger':!(newHeroNameModel.valid || newHeroNameModel.pristine)}">
-          <div class="input-group input-group-sm">
-            <input class="form-control" id="newHeroName" ngModel name="newHeroName" #newHeroName #newHeroNameModel="ngModel" notblank focus placeholder="Hero name"/>
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary btn-sm" [disabled]="!newHeroForm.form.valid">Add</button>
-            </span>
+<div *ngIf="heroes && heroes.length > 0">
+  <div>
+    <form novalidate (ngSubmit)="add(newHeroName.value); newHeroName.value=''; newHeroForm.reset();" #newHeroForm="ngForm">
+      <div class="form-group row">
+        <div class="col-sm-2"><label for="newHeroName">Hero name:</label></div>
+        <div class="col-sm-4">
+          <div [ngClass]="{'has-danger':!(newHeroNameModel.valid || newHeroNameModel.pristine)}">
+            <div class="input-group input-group-sm">
+              <input class="form-control" id="newHeroName" ngModel name="newHeroName" #newHeroName #newHeroNameModel="ngModel" notblank focus placeholder="Hero name"/>
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary btn-sm" [disabled]="!newHeroForm.form.valid">Add</button>
+              </span>
+            </div>
+            <small [hidden]="newHeroNameModel.valid || newHeroNameModel.pristine" class="form-control-feedback">Hero name is required</small>
           </div>
-          <small [hidden]="newHeroNameModel.valid || newHeroNameModel.pristine" class="form-control-feedback">Hero name is required</small>
         </div>
       </div>
-    </div>
-  </form> 
-</div>
+    </form> 
+  </div>
 
-<table class="table table-sm table-hover">
-  <tr *ngFor="let hero of heroes" [class.selected]="hero === selectedHero" (click)="newHeroForm.reset(); onSelect(hero)">
-    <th scope="row">{{hero.id}}</th> 
-    <td>{{hero.name}}</td>
-    <td><button class="btn btn-primary btn-sm" (click)="newHeroForm.reset(); delete(hero); $event.stopPropagation()">x</button></td>
-  </tr>
-</table>
+  <table class="table table-sm table-hover">
+    <tr *ngFor="let hero of heroes" [class.selected]="hero === selectedHero" (click)="newHeroForm.reset(); onSelect(hero)">
+      <th scope="row">{{hero.id}}</th> 
+      <td>{{hero.name}}</td>
+      <td><button class="btn btn-primary btn-sm" (click)="newHeroForm.reset(); selectedHero = null; delete(hero); $event.stopPropagation()">x</button></td>
+    </tr>
+  </table>
 
-<div *ngIf="selectedHero">
-  <h3>
-    {{selectedHero.name | uppercase}} is my hero
-  </h3>
-  <button #viewDetails class="btn btn-primary" (click)="gotoDetail()" focus>View Details</button>
+  <div *ngIf="selectedHero">
+    <h3>
+      {{selectedHero.name | uppercase}} is my hero
+    </h3>
+    <button #viewDetails class="btn btn-primary" (click)="gotoDetail()" focus>View Details</button>
+  </div>
 </div>

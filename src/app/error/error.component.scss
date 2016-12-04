@@ -1,0 +1,9 @@
+$modal-header-border-color: #a94442 !default;
+@import '~bootstrap/scss/bootstrap.scss';
+.error-modal .modal-content {
+    background-color: $state-danger-bg;
+    color: $state-danger-text;
+  }
+  .table th, .table td { 
+     border-top: none !important; 
+ }

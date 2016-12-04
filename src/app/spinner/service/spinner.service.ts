@@ -1,26 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class SpinnerService {
 
-  public status: Subject<boolean> = new Subject<boolean>();
-  private _active: boolean = false;
+  public status: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+  private active: boolean = false;
 
-  public get active(): boolean {
-    return this._active;
-  }
+  // public get active(): boolean {
+  //   return this._active;
+  // }
 
-  public set active(v: boolean) {
-    this._active = v;
-    this.status.next(v);
-  }
+  // public set active(value: boolean) {
+  //   this._active = value;
+  //   this.status.next(value);
+  // }
 
   public start(): void {
     this.active = true;
+    this.status.next(true);
   }
 
   public stop(): void {
     this.active = false;
+    this.status.next(false);
   }
 }

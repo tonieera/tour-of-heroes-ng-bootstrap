@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer, ElementRef, ViewChild } from '@angular/cor
 import { Router } from '@angular/router';
 
 import { SpinnerService } from '../spinner/service/spinner.service';
+import { ErrorService } from '../error/service/error.service';
 
 import { Hero } from './model/hero.model';
 import { HeroService } from './service/hero.service';
@@ -22,6 +23,7 @@ export class HeroesComponent implements OnInit {
   constructor(
     private router: Router,
     private spinnerService: SpinnerService,
+    private errorService: ErrorService,
     private heroService: HeroService,
     private renderer: Renderer) {
   }
@@ -32,19 +34,24 @@ export class HeroesComponent implements OnInit {
 
   getHeroes(): void {
     this.spinnerService.start();
-    this.heroService.getHeroes().then(heroes => { this.heroes = heroes; this.spinnerService.stop(); });
+    this.heroService.getHeroes()
+      .finally(() => this.spinnerService.stop())
+      .subscribe(
+        heroes => this.heroes = heroes,
+        error => this.errorService.publishError(error)
+      );
   }
 
   add(name: string) {
+    this.selectedHero = null;
     name = name.trim();
     this.spinnerService.start();
-    this.heroService.create(name).then(hero => {
-      console.log('New hero: ' + hero);
-      this.heroes.push(hero);
-      this.selectedHero = null;
-      this.spinnerService.stop();
-      this.renderer.invokeElementMethod(this.newHeroName.nativeElement, 'select');
-    });
+    this.heroService.create(name)
+      .finally(() => this.spinnerService.stop())
+      .subscribe(
+        hero => { this.heroes.push(hero); this.renderer.invokeElementMethod(this.newHeroName.nativeElement, 'select'); },
+        error => this.errorService.publishError(error)
+      );
   }
 
   onSelect(hero: Hero): void {
@@ -60,13 +67,17 @@ export class HeroesComponent implements OnInit {
 
   delete(hero: Hero): void {
     this.spinnerService.start();
-    this.heroService.delete(hero.id).then(() => {
-      this.heroes = this.heroes.filter(h => h !== hero);
-      if (this.selectedHero === hero) {
-        this.selectedHero = null;
-      };
-      this.spinnerService.stop();
-      this.renderer.invokeElementMethod(this.newHeroName.nativeElement, 'select');
-    });
+    this.heroService.delete(hero.id)
+      .finally(() => this.spinnerService.stop())
+      .subscribe(
+        () => {
+          this.heroes = this.heroes.filter(h => h !== hero);
+          if (this.selectedHero === hero) {
+            this.selectedHero = null;
+          };
+          this.renderer.invokeElementMethod(this.newHeroName.nativeElement, 'select');
+        },
+        error => this.errorService.publishError(error)
+      );
   }
 }

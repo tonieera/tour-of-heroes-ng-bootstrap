@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
+import { ErrorService } from '../../error/service/error.service';
+
 import { Hero } from '../model/hero.model';
 import { HeroService } from '../service/hero.service';
 
@@ -17,6 +19,7 @@ export class HeroSearchComponent implements OnInit {
   private searchTerms = new Subject<string>();
 
   constructor(
+    private errorService: ErrorService,
     private heroService: HeroService,
     private router: Router) { }
 
@@ -34,11 +37,11 @@ export class HeroSearchComponent implements OnInit {
         ? this.heroService.search(term)
         // or the observable of empty heroes if no search term
         : Observable.of<Hero[]>([]))
-      .catch(error => {
-      // TODO: real error handling
-      console.log(error);
-      return Observable.of<Hero[]>([]);
-    });
+        .catch(error => {
+          this.errorService.publishError(error);
+          return Observable.of<Hero[]>([]);
+        }
+      );
   }
 
   gotoDetail(hero: Hero): void {

@@ -1,9 +1,11 @@
 <h3>Top Heroes</h3>
-<div class="row heroes">
+<div *ngIf="heroes && heroes.length > 0">
+  <div class="row heroes">
     <a *ngFor="let hero of heroes" [routerLink]="['/detail', hero.id]"  class="col-md-3">
-        <div class="hero">
-            <h4>{{hero.name}}</h4>
-        </div>
+      <div class="hero">
+        <h4>{{hero.name}}</h4>
+      </div>
     </a>
+  </div>
+  <app-hero-search></app-hero-search>
 </div>
-<app-hero-search></app-hero-search>

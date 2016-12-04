@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SpinnerService} from './service/spinner.service';
 
 @Component({
@@ -7,12 +7,19 @@ import { SpinnerService} from './service/spinner.service';
   styleUrls: ['./spinner.component.scss']
 })
 
-export class SpinnerComponent {
+export class SpinnerComponent implements OnInit, OnDestroy {
   public active: boolean;
 
-  public constructor(spinner: SpinnerService) {
-    spinner.status.subscribe((status: boolean) => {
+  public constructor(private spinner: SpinnerService) {
+  }
+
+  ngOnInit() {
+    this.spinner.status.subscribe((status: boolean) => {
       this.active = status;
     });
+  }
+
+  ngOnDestroy() {
+    this.spinner.status.unsubscribe();
   }
 }
